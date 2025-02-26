@@ -3,6 +3,7 @@ package com.alemolina.tasks.presentation.ui
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -28,28 +29,36 @@ fun AddTaskScreen(viewModel: TaskViewModel, navController: NavHostController) {
         TextField(
             value = title,
             onValueChange = { title = it },
-            label = { Text("Título") }
+            label = { Text("Título") },
+            modifier = Modifier.fillMaxWidth()
         )
+        Spacer(modifier = Modifier.height(12.dp))
         TextField(
             value = description,
             onValueChange = { description = it },
-            label = { Text("Descripción") }
+            label = { Text("Descripción") },
+            modifier = Modifier.fillMaxWidth()
         )
-        Row(modifier = Modifier.padding(16.dp)) {
-            Button(onClick = {
-                if (title.isNotBlank()) {
-                    viewModel.addTask(title, description)
-                    navController.popBackStack() // Volver a la lista de tareas
-                }
-            }) {
+        Spacer(modifier = Modifier.height(20.dp))
+        Row {
+            Button(
+                onClick = {
+                    if (title.isNotBlank()) {
+                        viewModel.addTask(title, description)
+                        navController.popBackStack() // Navigate back to task list
+                    }
+                },
+                modifier = Modifier.weight(1f)
+            ) {
                 Text("Guardar")
             }
             Spacer(modifier = Modifier.width(12.dp))
-            Button(onClick = {
-                if (title.isNotBlank()) {
-                    navController.popBackStack() // Volver a la lista de tareas
-                }
-            }) {
+            Button(
+                onClick = {
+                    navController.popBackStack() // Allow cancel regardless of title being blank
+                },
+                modifier = Modifier.weight(1f)
+            ) {
                 Text("Cancelar")
             }
         }
