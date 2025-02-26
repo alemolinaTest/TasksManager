@@ -18,7 +18,7 @@ fun NavigationGraph(navController: NavHostController, viewModel: TaskViewModel) 
         composable("addTask") {
             AddTaskScreen(viewModel, navController)
         }
-        composable("taskDetail/{taskId}") {
+        composable("taskDetail") {
             TaskDetailScreen( viewModel, navController)
         }
     }

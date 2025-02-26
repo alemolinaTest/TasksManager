@@ -10,6 +10,7 @@ import com.alemolina.tasks.domain.model.DomainTask
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -35,9 +36,15 @@ class TaskViewModel(
         observeTasks()
     }
 
+    private suspend fun changeLoadingState(isLoading: Boolean) {
+        if (isLoading) delay(1000)
+        _isLoading.value = isLoading
+    }
+
     private fun observeTasks() {
         viewModelScope.launch {
             getTasksUseCase().collectLatest { _tasks.value = it }
+            changeLoadingState(false)
         }
     }
 
@@ -48,7 +55,13 @@ class TaskViewModel(
     }
 
     fun removeTask(id: Int) {
-        viewModelScope.launch { removeTaskUseCase(id) }
+
+        viewModelScope.launch {
+            changeLoadingState(true)
+            removeTaskUseCase(id)
+            changeLoadingState(false)
+        }
+
     }
 
     fun toggleTask(id: Int) {
