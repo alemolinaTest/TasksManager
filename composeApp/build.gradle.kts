@@ -1,25 +1,25 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    id("app.cash.sqldelight") version "2.0.1"
 
 }
 
 kotlin {
     androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+        compilations.all {
+            kotlinOptions {
+                jvmTarget = JavaVersion.VERSION_11.toString()
+            }
         }
     }
-    
+
+    jvmToolchain(11) // 🔹 Ensure JVM 11 is used consistently
+
+
     listOf(
-        iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach { iosTarget ->
@@ -28,7 +28,7 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     sourceSets {
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -46,15 +46,19 @@ kotlin {
             implementation(libs.compose.ui)
             implementation(libs.compose.foundation)
             implementation(libs.compose.material)
+            implementation(libs.sqlDelight.runtime)
+            implementation(libs.coroutines.extensions)
         }
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
+            implementation(libs.android.driver)
         }
 
         iosMain.dependencies {
+            implementation(libs.native.driver)
             implementation(libs.koin.core)
         }
     }
@@ -98,4 +102,12 @@ android {
 dependencies {
     implementation(libs.identity.jvm)
     debugImplementation(compose.uiTooling)
+}
+
+sqldelight {
+    databases {
+        create("TasksDatabase") {
+            packageName.set("com.alemolina.tasks.database")
+        }
+    }
 }

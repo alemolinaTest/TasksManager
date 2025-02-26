@@ -5,10 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.alemolina.tasks.presentation.TaskViewModel
 import com.alemolina.tasks.presentation.ui.MainScreen
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
-    private val viewModel: TaskViewModel by inject()
+    private val viewModel: TaskViewModel by viewModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -17,9 +17,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-//@Preview
-//@Composable
-//fun AppAndroidPreview() {
-//    MainScreen(viewModel)
-//}

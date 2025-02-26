@@ -16,6 +16,7 @@ junit = "4.13.2"
 kotlin = "2.1.0"
 gradle = "8.5.2"
 androidDriver = "2.0.2"
+sqlDelight = "2.0.2"
 koin = "4.0.0"
 identityJvm = "202411.1"
 uuid ="0.7.0"
@@ -55,6 +56,9 @@ compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose" }
 compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose" }
 compose-material = { module = "org.jetbrains.compose.material3:material3", version.ref = "compose" }
 
+native-driver = { module = "app.cash.sqldelight:native-driver", version.ref = "androidDriver" }
+primitive-adapters = { module = "app.cash.sqldelight:primitive-adapters", version.ref = "androidDriver" }
+sqlDelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sqlDelight" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

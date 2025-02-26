@@ -25,7 +25,10 @@ fun TaskListScreen(viewModel: TaskViewModel, navController: NavHostController) {
                 items(tasks) { task ->
                     TaskItem(
                         task,
-                        onClick = { navController.navigate("taskDetail/${task.id}") },
+                        onClick = {
+                            viewModel.getTaskById(taskId = task.id)
+                            navController.navigate("taskDetail")
+                        },
                         onToggle = { viewModel.toggleTask(task.id) },
                         onDelete = { viewModel.removeTask(task.id) }
                     )
@@ -37,7 +40,7 @@ fun TaskListScreen(viewModel: TaskViewModel, navController: NavHostController) {
 
 @Composable
 fun TaskItem(task: DomainTask, onClick: () -> Unit, onToggle: () -> Unit, onDelete: () -> Unit) {
-    var showDialog by remember { mutableStateOf(false) } // 🔥 Controls dialog visibility
+    var showDialog by remember { mutableStateOf(false) }
 
     Row(
         modifier = Modifier
@@ -47,8 +50,8 @@ fun TaskItem(task: DomainTask, onClick: () -> Unit, onToggle: () -> Unit, onDele
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Column(modifier = Modifier.weight(1f)) {
-            Text(text = task.title, style = MaterialTheme.typography.h6)
-            Text(text = task.description, style = MaterialTheme.typography.body2)
+            Text(text = task.titulo, style = MaterialTheme.typography.h6)
+            task.description?.let { Text(text = it, style = MaterialTheme.typography.body2) }
         }
         Checkbox(checked = task.isCompleted, onCheckedChange = { onToggle() })
         Button(onClick = { showDialog = true }) { // 🔥 Show dialog before deleting
@@ -56,7 +59,6 @@ fun TaskItem(task: DomainTask, onClick: () -> Unit, onToggle: () -> Unit, onDele
         }
     }
 
-    // 🔥 Confirmation Dialog
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
@@ -65,7 +67,7 @@ fun TaskItem(task: DomainTask, onClick: () -> Unit, onToggle: () -> Unit, onDele
             confirmButton = {
                 Button(
                     onClick = {
-                        onDelete() // 🔥 Execute delete
+                        onDelete()
                         showDialog = false
                     }
                 ) {

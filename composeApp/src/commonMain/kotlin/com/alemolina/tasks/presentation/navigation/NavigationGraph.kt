@@ -18,9 +18,8 @@ fun NavigationGraph(navController: NavHostController, viewModel: TaskViewModel) 
         composable("addTask") {
             AddTaskScreen(viewModel, navController)
         }
-        composable("taskDetail/{taskId}") { backStackEntry ->
-            val taskId = backStackEntry.arguments?.getString("taskId") ?: ""
-            TaskDetailScreen(taskId, viewModel, navController)
+        composable("taskDetail/{taskId}") {
+            TaskDetailScreen( viewModel, navController)
         }
     }
 }

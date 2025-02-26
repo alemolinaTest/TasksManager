@@ -1,57 +1,64 @@
 package com.alemolina.tasks.presentation
 
-
-import com.alemolina.tasks.data.repository.TaskRepository
+import androidx.lifecycle.ViewModel
+import com.alemolina.tasks.domain.iteractor.AddTaskUseCase
+import com.alemolina.tasks.domain.iteractor.GetTaskByIdUseCase
+import com.alemolina.tasks.domain.iteractor.GetTasksUseCase
+import com.alemolina.tasks.domain.iteractor.RemoveTaskUseCase
+import com.alemolina.tasks.domain.iteractor.ToggleTaskUseCase
 import com.alemolina.tasks.domain.model.DomainTask
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class TaskViewModel(private val repository: TaskRepository) {
+class TaskViewModel(
+    private val getTasksUseCase: GetTasksUseCase,
+    private val addTaskUseCase: AddTaskUseCase,
+    private val removeTaskUseCase: RemoveTaskUseCase,
+    private val toggleTaskUseCase: ToggleTaskUseCase,
+    private val getTaskByIdUseCase: GetTaskByIdUseCase,
+) : ViewModel() {
     private val viewModelScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
-    private val _isLoading = MutableStateFlow(true)
+    private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
     private val _tasks = MutableStateFlow<List<DomainTask>>(emptyList())
     val tasks: StateFlow<List<DomainTask>> = _tasks
+    private val _task = MutableStateFlow<DomainTask?>(null)
+    val task: StateFlow<DomainTask?> = _task
 
     init {
-        _isLoading.value = true
-        loadTasks()
+        observeTasks()
     }
 
-    private fun loadTasks() {
+    private fun observeTasks() {
         viewModelScope.launch {
-            _tasks.value = repository.getAllTasks()
-            _isLoading.value = false
+            getTasksUseCase().collectLatest { _tasks.value = it }
         }
     }
 
     fun addTask(title: String, description: String) {
         viewModelScope.launch {
-            repository.addTask(title = title, description = description)
-            _tasks.value = repository.getAllTasks()
+            addTaskUseCase(title, description)
         }
     }
 
-    fun removeTask(id: String) {
+    fun removeTask(id: Int) {
+        viewModelScope.launch { removeTaskUseCase(id) }
+    }
+
+    fun toggleTask(id: Int) {
+        viewModelScope.launch { toggleTaskUseCase(id) }
+    }
+
+    fun getTaskById(taskId: Int) {
         viewModelScope.launch {
-            repository.removeTask(id)
-            _tasks.value = repository.getAllTasks()
+            _task.value = getTaskByIdUseCase.invoke(taskId = taskId)
         }
     }
-
-    fun toggleTask(id: String) {
-        viewModelScope.launch {
-            repository.toggleTask(id)
-            _tasks.value = repository.getAllTasks()
-        }
-    }
-
-    fun getTaskById(id: String): DomainTask? = tasks.value.find { it.id == id }
 
 }
