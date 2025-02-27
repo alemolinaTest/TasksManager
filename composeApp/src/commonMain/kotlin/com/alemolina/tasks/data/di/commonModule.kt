@@ -52,7 +52,8 @@ fun commonModule() = module {
             addTaskUseCase = get(),
             removeTaskUseCase = get(),
             toggleTaskUseCase = get(),
-            getTaskByIdUseCase = get()
+            getTaskByIdUseCase = get(),
+            locationProvider = get()
         )
     }
 }

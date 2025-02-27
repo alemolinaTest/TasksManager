@@ -7,6 +7,7 @@ import com.alemolina.tasks.domain.iteractor.GetTasksUseCase
 import com.alemolina.tasks.domain.iteractor.RemoveTaskUseCase
 import com.alemolina.tasks.domain.iteractor.ToggleTaskUseCase
 import com.alemolina.tasks.domain.model.DomainTask
+import com.alemolina.tasks.location.LocationProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -22,6 +23,7 @@ class TaskViewModel(
     private val removeTaskUseCase: RemoveTaskUseCase,
     private val toggleTaskUseCase: ToggleTaskUseCase,
     private val getTaskByIdUseCase: GetTaskByIdUseCase,
+    private val locationProvider: LocationProvider,
 ) : ViewModel() {
     private val viewModelScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private val _isLoading = MutableStateFlow(false)
@@ -50,7 +52,25 @@ class TaskViewModel(
 
     fun addTask(title: String, description: String) {
         viewModelScope.launch {
-            addTaskUseCase(title, description)
+            val location = getLocationOrMock()
+
+            addTaskUseCase(
+                title = title,
+                description = description,
+            )
+        }
+    }
+
+    private suspend fun getLocationOrMock(): Pair<Double, Double> {
+        //Log.d("TaskViewModel", "Requesting location...")
+
+        val location = locationProvider.getCurrentLocation()
+        return if (location != null) {
+            //Log.d("TaskViewModel", "Real location retrieved - Lat: ${location.latitude}, Lon: ${location.longitude}")
+            Pair(location.latitude, location.longitude)
+        } else {
+            //Log.d("TaskViewModel", "Location retrieval failed, using mock location.")
+            Pair(0.0, 0.0) // Mocked location
         }
     }
 

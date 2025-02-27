@@ -6,5 +6,5 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 actual val viewModelModule = module {
-    viewModel { TaskViewModel(get(), get(), get(), get(), get()) }
+    viewModel { TaskViewModel(get(), get(), get(), get(), get(), get()) }
 }
