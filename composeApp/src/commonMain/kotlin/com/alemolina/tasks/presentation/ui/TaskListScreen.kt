@@ -52,6 +52,8 @@ fun TaskItem(task: DomainTask, onClick: () -> Unit, onToggle: () -> Unit, onDele
         Column(modifier = Modifier.weight(1f)) {
             Text(text = task.titulo, style = MaterialTheme.typography.h6)
             task.description?.let { Text(text = it, style = MaterialTheme.typography.body2) }
+            task.latitude?.let { Text(text = it, style = MaterialTheme.typography.body2) }
+            task.longitude?.let { Text(text = it, style = MaterialTheme.typography.body2) }
         }
         Checkbox(checked = task.isCompleted, onCheckedChange = { onToggle() })
         Button(onClick = { showDialog = true }) { // 🔥 Show dialog before deleting

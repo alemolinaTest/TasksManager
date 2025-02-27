@@ -18,11 +18,25 @@ class TaskRepositoryImpl(database: TasksDatabase) : TaskRepository {
 
     private val dbQuery = database.taskQueries
 
-    override suspend fun addTask(title: String, description: String) {
-        DomainTask(0, title, description, false).toTaskEntity().let {
+    override suspend fun addTask(
+        title: String,
+        description: String,
+        latitude: String,
+        longitude: String
+    ) {
+        DomainTask(
+            id = 0,
+            titulo = title,
+            description = description,
+            latitude = latitude,
+            longitude = longitude,
+            isCompleted = false,
+        ).toTaskEntity().let {
             dbQuery.insertTask(
                 titulo = it.titulo,
                 description = it.description,
+                latitude = latitude,
+                longitude = longitude,
                 isCompleted = it.isCompleted
             )
         }

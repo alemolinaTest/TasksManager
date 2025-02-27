@@ -1,30 +1,32 @@
 import kotlin.Boolean;
 import kotlin.Int;
 
-CREATE TABLE IF NOT EXISTS taskEntity (
+CREATE TABLE IF NOT EXISTS TaskEntity (
     id INTEGER AS Int NOT NULL PRIMARY KEY AUTOINCREMENT,
     titulo TEXT NOT NULL,
-    description TEXT,
-    isCompleted INTEGER AS Boolean NOT NULL
+    description TEXT DEFAULT '',
+	latitude TEXT DEFAULT '0.0',
+	longitude TEXT DEFAULT '0.0',
+    isCompleted INTEGER NOT NULL DEFAULT 0
 );
 
 getAllTasks:
-SELECT * FROM taskEntity ORDER BY id DESC;
+SELECT * FROM TaskEntity ORDER BY id DESC;
 
 getTaskById:
-SELECT * FROM taskEntity WHERE id = ?;
+SELECT * FROM TaskEntity WHERE id = ?;
 
 insertTask:
 INSERT OR REPLACE
-INTO taskEntity (titulo, description, isCompleted)
-VALUES (?,?,?);
+INTO TaskEntity (titulo, description, latitude, longitude , isCompleted)
+VALUES (?,?,?,?,?);
 
 deleteTaskById:
-DELETE FROM taskEntity WHERE id = ?;
+DELETE FROM TaskEntity WHERE id = ?;
 
 deleteAllTasks:
-DELETE FROM taskEntity;
+DELETE FROM TaskEntity;
 
 updateTaskCompleteStatus:
-UPDATE taskEntity SET isCompleted = CASE WHEN isCompleted = 1 THEN 0 ELSE 1 END
+UPDATE TaskEntity SET isCompleted = CASE WHEN isCompleted = 1 THEN 0 ELSE 1 END
  WHERE id = ?;

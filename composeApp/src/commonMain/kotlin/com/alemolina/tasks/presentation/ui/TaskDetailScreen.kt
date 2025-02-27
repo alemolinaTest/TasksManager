@@ -42,6 +42,14 @@ fun TaskDetailScreen(viewModel: TaskViewModel, navController: NavHostController)
                 text = "Descripción: ${task!!.description}",
                 style = MaterialTheme.typography.h6
             )
+            Text(
+                text = "Latitud: ${task!!.latitude}",
+                style = MaterialTheme.typography.h6
+            )
+            Text(
+                text = "Longitud: ${task!!.longitude}",
+                style = MaterialTheme.typography.h6
+            )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = "Estado: ${if (task!!.isCompleted) "Completada" else "Pendiente"}",

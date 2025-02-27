@@ -57,19 +57,18 @@ class TaskViewModel(
             addTaskUseCase(
                 title = title,
                 description = description,
+                latitude = location?.first.toString(),
+                longitude = location?.second.toString(),
             )
         }
     }
 
     private suspend fun getLocationOrMock(): Pair<Double, Double> {
-        //Log.d("TaskViewModel", "Requesting location...")
 
         val location = locationProvider.getCurrentLocation()
         return if (location != null) {
-            //Log.d("TaskViewModel", "Real location retrieved - Lat: ${location.latitude}, Lon: ${location.longitude}")
             Pair(location.latitude, location.longitude)
         } else {
-            //Log.d("TaskViewModel", "Location retrieval failed, using mock location.")
             Pair(0.0, 0.0) // Mocked location
         }
     }

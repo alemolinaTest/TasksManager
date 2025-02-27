@@ -23,7 +23,7 @@ fun commonModule() = module {
     single<TasksDatabase> {
         TasksDatabase(
             driver = get<DatabaseDriverFactory>().createDriver(),
-            taskEntityAdapter = TaskEntity.Adapter(
+            TaskEntityAdapter = TaskEntity.Adapter(
                 idAdapter = idAdapter ),
         )
     }
