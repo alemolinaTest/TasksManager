@@ -6,6 +6,11 @@ import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import com.alemolina.tasks.database.TasksDatabase
 
 actual class DatabaseDriverFactory(private val context: Context) {
-    actual fun createDriver(): SqlDriver =
-        AndroidSqliteDriver(TasksDatabase.Schema, context, "tasks.db")
+    actual fun createDriver(): SqlDriver {
+        return AndroidSqliteDriver(
+            schema = TasksDatabase.Schema,
+            context = context,
+            name = "tasks.db"
+        )
+    }
 }

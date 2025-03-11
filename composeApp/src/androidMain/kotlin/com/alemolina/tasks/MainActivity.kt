@@ -11,11 +11,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.alemolina.tasks.presentation.TaskViewModel
 import com.alemolina.tasks.presentation.ui.MainScreen
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.android.ext.android.inject
 
 
 class MainActivity : ComponentActivity() {
-    private val viewModel: TaskViewModel by viewModel()
+    private val viewModel : TaskViewModel by inject()
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
             val fineLocationGranted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] ?: false

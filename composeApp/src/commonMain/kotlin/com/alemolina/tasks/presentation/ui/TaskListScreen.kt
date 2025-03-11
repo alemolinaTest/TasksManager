@@ -45,7 +45,7 @@ fun TaskItem(task: DomainTask, onClick: () -> Unit, onToggle: () -> Unit, onDele
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick() } // Click to go to details
+            .clickable { onClick() }
             .padding(8.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -56,7 +56,7 @@ fun TaskItem(task: DomainTask, onClick: () -> Unit, onToggle: () -> Unit, onDele
             task.longitude?.let { Text(text = it, style = MaterialTheme.typography.body2) }
         }
         Checkbox(checked = task.isCompleted, onCheckedChange = { onToggle() })
-        Button(onClick = { showDialog = true }) { // 🔥 Show dialog before deleting
+        Button(onClick = { showDialog = true }) {
             Text("Eliminar")
         }
     }

@@ -3,9 +3,9 @@ agp = "8.5.2"
 android-compileSdk = "35"
 android-minSdk = "24"
 android-targetSdk = "35"
-androidx-activityCompose = "1.10.0"
+androidx-activityCompose = "1.10.1"
 androidx-appcompat = "1.7.0"
-androidx-constraintlayout = "2.2.0"
+androidx-constraintlayout = "2.2.1"
 androidx-core-ktx = "1.15.0"
 androidx-espresso-core = "3.6.1"
 androidx-lifecycle = "2.8.4"
@@ -23,12 +23,13 @@ uuid ="0.7.0"
 androidx-navigation = "2.8.0-alpha10"
 compose = "1.7.1"
 androidx-security = "1.1.0-alpha06"  # Para EncryptedSharedPreferences
-kotlinx-coroutines = "1.10.1"         # Para funciones asíncronas (opcional)
-
+kotlinx-coroutines = "1.10.1"
+locationdelegation = "1.1.1"         # Para funciones asíncronas (opcional)
+#sqlCipher ="1.5.5"
 
 
 [libraries]
-android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "androidDriver" }
+
 coroutines-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "androidDriver" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
@@ -60,16 +61,18 @@ compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose" }
 compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose" }
 compose-material = { module = "org.jetbrains.compose.material3:material3", version.ref = "compose" }
 
-native-driver = { module = "app.cash.sqldelight:native-driver", version.ref = "androidDriver" }
+sqlDelight-android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "androidDriver" }
+sqlDelight-native-driver = { module = "app.cash.sqldelight:native-driver", version.ref = "androidDriver" }
 primitive-adapters = { module = "app.cash.sqldelight:primitive-adapters", version.ref = "androidDriver" }
 sqlDelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sqlDelight" }
 
-sqldelight-driver-sqlcipher = { module = "app.cash.sqldelight:sqlcipher-android-driver", version = "androidDriver" }
+#sqldelight-driver-sqlcipher = { module = "app.cash.sqldelight:sqlcipher-android-driver", version.ref = "sqlCipher" }
 
 
 androidx-security = { module = "androidx.security:security-crypto", version.ref = "androidx-security" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version = "21.0.1" }
+locationdelegation = { group = "com.google.androidbrowserhelper", name = "locationdelegation", version.ref = "locationdelegation" }
 
 
 
@@ -79,3 +82,4 @@ androidLibrary = { id = "com.android.library", version.ref = "agp" }
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+nativeCocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }

@@ -1,6 +1,5 @@
 package com.alemolina.tasks.presentation
 
-import androidx.lifecycle.ViewModel
 import com.alemolina.tasks.domain.iteractor.AddTaskUseCase
 import com.alemolina.tasks.domain.iteractor.GetTaskByIdUseCase
 import com.alemolina.tasks.domain.iteractor.GetTasksUseCase
@@ -8,29 +7,29 @@ import com.alemolina.tasks.domain.iteractor.RemoveTaskUseCase
 import com.alemolina.tasks.domain.iteractor.ToggleTaskUseCase
 import com.alemolina.tasks.domain.model.DomainTask
 import com.alemolina.tasks.location.LocationProvider
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
+import com.alemolina.tasks.presentation.providers.createViewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class TaskViewModel(
+open class TaskViewModel(
     private val getTasksUseCase: GetTasksUseCase,
     private val addTaskUseCase: AddTaskUseCase,
     private val removeTaskUseCase: RemoveTaskUseCase,
     private val toggleTaskUseCase: ToggleTaskUseCase,
     private val getTaskByIdUseCase: GetTaskByIdUseCase,
     private val locationProvider: LocationProvider,
-) : ViewModel() {
-    private val viewModelScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+)  {
+    private val viewModelScope = createViewModelScope()
+
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
     private val _tasks = MutableStateFlow<List<DomainTask>>(emptyList())
     val tasks: StateFlow<List<DomainTask>> = _tasks
+
     private val _task = MutableStateFlow<DomainTask?>(null)
     val task: StateFlow<DomainTask?> = _task
 
@@ -57,8 +56,8 @@ class TaskViewModel(
             addTaskUseCase(
                 title = title,
                 description = description,
-                latitude = location?.first.toString(),
-                longitude = location?.second.toString(),
+                latitude = location.first.toString(),
+                longitude = location.second.toString(),
             )
         }
     }
@@ -67,9 +66,9 @@ class TaskViewModel(
 
         val location = locationProvider.getCurrentLocation()
         return if (location != null) {
-            Pair(location.latitude, location.longitude)
+            location.latitude to location.longitude
         } else {
-            Pair(0.0, 0.0) // Mocked location
+            0.0 to 0.0 // Mocked location
         }
     }
 
@@ -80,7 +79,6 @@ class TaskViewModel(
             removeTaskUseCase(id)
             changeLoadingState(false)
         }
-
     }
 
     fun toggleTask(id: Int) {
@@ -92,5 +90,4 @@ class TaskViewModel(
             _task.value = getTaskByIdUseCase.invoke(taskId = taskId)
         }
     }
-
 }

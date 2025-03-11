@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     id("app.cash.sqldelight") version "2.0.1"
+    kotlin("native.cocoapods")
 
 }
 
@@ -18,52 +19,64 @@ kotlin {
 
     jvmToolchain(11) // 🔹 Ensure JVM 11 is used consistently
 
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
 
-    listOf(
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
+
+    cocoapods {
+        version = "1.16.2"
+        summary = "Compose App Shared Module"
+        homepage = "https://github.com/alemolinaTest/TasksManager"
+        ios.deploymentTarget = "13.0"
+
+        framework {
             baseName = "ComposeApp"
-            isStatic = true
+            isStatic = false
+            freeCompilerArgs += "-Xbinary=bundleId=com.alemolina.tasks"
+            linkerOpts("-lsqlite3")
         }
     }
 
+
     sourceSets {
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.viewmodel)
-            implementation(libs.androidx.lifecycle.runtime.compose)
-            implementation(libs.koin.core)
-            implementation(libs.uuid)
-            implementation(libs.androidx.navigation.compose)
-            implementation(libs.compose.runtime)
-            implementation(libs.compose.ui)
-            implementation(libs.compose.foundation)
-            implementation(libs.compose.material)
-            implementation(libs.sqlDelight.runtime)
-            implementation(libs.coroutines.extensions)
-            implementation(libs.kotlinx.coroutines.core)
+            api(compose.runtime)
+            api(compose.foundation)
+            api(compose.material)
+            api(compose.ui)
+            api(compose.components.resources)
+            api(compose.components.uiToolingPreview)
+            api(libs.androidx.lifecycle.viewmodel)
+            api(libs.androidx.lifecycle.runtime.compose)
+            api(libs.koin.core)
+            api(libs.uuid)
+            api(libs.androidx.navigation.compose)
+            api(libs.compose.runtime)
+            api(libs.compose.ui)
+            api(libs.compose.foundation)
+            api(libs.compose.material)
+            api(libs.sqlDelight.runtime)
+            api(libs.coroutines.extensions)
+            api(libs.kotlinx.coroutines.core)
+            //implementation(libs.sqldelight.driver.sqlcipher)
         }
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
-            implementation(libs.android.driver)
+            implementation(libs.sqlDelight.android.driver)
             implementation(libs.androidx.security)
             implementation(libs.play.services.location)
         }
 
         iosMain.dependencies {
-            implementation(libs.native.driver)
-            implementation(libs.koin.core)
-            implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.sqlDelight.native.driver)
+            api(libs.sqlDelight.runtime)
+            api(libs.koin.core)
+            api(libs.kotlinx.coroutines.core)
+            api(libs.koin.core)
         }
     }
 }
@@ -105,6 +118,7 @@ android {
 
 dependencies {
     implementation(libs.identity.jvm)
+    implementation(libs.locationdelegation)
     debugImplementation(compose.uiTooling)
 }
 
