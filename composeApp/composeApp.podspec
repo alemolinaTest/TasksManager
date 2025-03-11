@@ -1,7 +1,7 @@
 Pod::Spec.new do |spec|
     spec.name                     = 'composeApp'
-    spec.version                  = '1.0.0'
-    spec.homepage                 = 'https://your.project.url'
+    spec.version                  = '1.16.2'
+    spec.homepage                 = 'https://github.com/alemolinaTest/TasksManager'
     spec.source                   = { :http=> ''}
     spec.authors                  = ''
     spec.license                  = ''
